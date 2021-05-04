@@ -18,77 +18,75 @@ var streetMap =L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/
 
 streetMap.addTo(myMap);
 
-//base url for json data pull
+//base url for json data pull ()
 var baseUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 //using url as variable incase need to adjust to store query variable above
 var url = baseUrl
 
-// start d3.json function 
-d3.json(url, function(earthquakes) {
-	console.log(earthquakes)
 
-//create functions for the circles to define ranges
-//create style element
-	function circleStyle(feature){
-		return{
-		      "opacity": 1,
-      		  "fillOpacity": .75,
-		      "fillColor": magColor(feature.properties.mag),
-		      "color": "#000000",
-		      "radius": magRadius(feature.properties.mag),
-		      "stroke": true,
-		      "weight": 0.5	
-		};
-	}
+
+// start d3.json function 
+d3.json(url, function(eqData) {
+	// console.log(earthquakes)
+	addFeatures(eqData.features);
+});
+//using the d3.json data, create function to bind pop, and add circle layer
+function addFeatures(eqData){
+	var earthquakes = L.geoJson(eqData,{
+		//use onEachFeature function to bind popup/data to each created feature
+		onEachFeature(feature,layer){
+			//bindpop to layer, with html styling to read correctly into the popup
+			layer.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <hr> <h2> Magnitude: " 
+				+ feature.properties.mag+"</h2>");
+		},
+		//A Function defining how GeoJSON points spawn Leaflet layers.
+		// It is internally called when data is added, passing the GeoJSON point feature and its LatLng. 
+		pointToLayer(feature,latlng){
+			return new L.circle(latlng,
+			{
+      		  fillOpacity: .75,
+		      fillColor: magColors(feature.properties.mag),
+		      color: "#000000",
+		      radius: magRadius(feature.properties.mag),
+		      stroke: true,
+		      weight: 0.5	
+			})
+		}
+	}).addTo(myMap);
+};
+
 	
 //create color scale for magitudes
-	function magColors(mag){
-		switch (true){
-			case mag > 5:
-				return "#ff3300";
-			case mag > 4:
-				return "#ff0066";
-			case mag > 3:		
-				return "#cc00ff";
-			case mag > 2:
-				return "#66ffff";
-			case mag > 1:
-				return "#99ff33";
-			default:
-				return "#00ff00";
+	function magColors(magnitude){
+		if (magnitude> 5){
+				return "#ff3300"
+			}else if
+			(magnitude> 4){
+				return "#ff0066"
+			} else if
+			(magnitude> 3){		
+				return "#cc00ff"
+			} else if
+			(magnitude> 2){
+				return "#66ffff"
+			} else if
+			(magnitude> 1){
+				return "#99ff33"
+			} else{
+				return "#00ff00"
+			}
 
 		};
-	}
-//create adjusting radius for circle based on magnitude *5
-	function magRadius(mag){
-		if(mag===0){
-			return 1;
-		}
-		return mag*5;
+//create adjusting radius for circle based on magnitude *500
+	function magRadius(magnitude){
+		return magnitude*30000;
 	}
 
-// use geojson to add the markers to the map
-	L.geoJson(earthquakes, {
-		//append the markers via geojson latlng
-		function(feature, latlng){
-			return L.circleMarker(latlng);
-		},
-		//apply style elements to the markers
-		circleStyle,
-		// bind popup with location and magnitude details
-		function(feature, detail){
-			detail.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>");
-			// add to my map
-	}).addTo(myMap);
 	//documentation on popups example
 	// var cmarker = L.Polygon(latlng)
 	// 				.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>").addTo(myMap);
 	// 				cmarker.openPopup();
 	// 				cmarker.closePopup();
 	// 	// }
-
-})
-
-
 
