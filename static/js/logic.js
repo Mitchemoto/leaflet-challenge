@@ -30,7 +30,7 @@ d3.json(url, function(earthquakes) {
 
 //create functions for the circles to define ranges
 //create style element
-	function mapStyle(feature){
+	function circleStyle(feature){
 		return{
 		      "opacity": 1,
       		  "fillOpacity": .75,
@@ -75,13 +75,18 @@ d3.json(url, function(earthquakes) {
 			return L.circleMarker(latlng);
 		},
 		//apply style elements to the markers
-		mapStyle,
+		circleStyle,
 		// bind popup with location and magnitude details
 		function(feature, detail){
-			detail.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>")
-		}
-		//	add to my map
+			detail.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>");
+			// add to my map
 	}).addTo(myMap);
+	//documentation on popups example
+	// var cmarker = L.Polygon(latlng)
+	// 				.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>").addTo(myMap);
+	// 				cmarker.openPopup();
+	// 				cmarker.closePopup();
+	// 	// }
 
 })
 
