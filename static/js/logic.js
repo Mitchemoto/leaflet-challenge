@@ -32,13 +32,13 @@ d3.json(url, function(earthquakes) {
 //create style element
 	function mapStyle(feature){
 		return{
-		      opacity: 1,
-      		  fillOpacity: .75,
-		      fillColor: magColor(feature.properties.mag),
-		      color: "#000000",
-		      radius: magRadius(feature.properties.mag),
-		      stroke: true,
-		      weight: 0.5	
+		      "opacity": 1,
+      		  "fillOpacity": .75,
+		      "fillColor": magColor(feature.properties.mag),
+		      "color": "#000000",
+		      "radius": magRadius(feature.properties.mag),
+		      "stroke": true,
+		      "weight": 0.5	
 		};
 	}
 	
@@ -58,9 +58,9 @@ d3.json(url, function(earthquakes) {
 			default:
 				return "#00ff00";
 
-		}
+		};
 	}
-//create adjusting radius for circle based on magnitude
+//create adjusting radius for circle based on magnitude *5
 	function magRadius(mag){
 		if(mag===0){
 			return 1;
@@ -70,16 +70,18 @@ d3.json(url, function(earthquakes) {
 
 // use geojson to add the markers to the map
 	L.geoJson(earthquakes, {
+		//append the markers via geojson latlng
 		function(feature, latlng){
-			return L.circle(latlng);
+			return L.circleMarker(latlng);
 		},
-
+		//apply style elements to the markers
 		mapStyle,
-
+		// bind popup with location and magnitude details
 		function(feature, detail){
 			detail.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>")
 		}
-	}).addTo(myMap)
+		//	add to my map
+	}).addTo(myMap);
 
 })
 
