@@ -76,8 +76,8 @@ d3.json(url, function(earthquakes) {
 
 		mapStyle,
 
-		function(feature, layer){
-			layer.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>")
+		function(feature, detail){
+			detail.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>")
 		}
 	}).addTo(myMap)
 
