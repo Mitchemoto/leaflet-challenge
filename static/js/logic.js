@@ -60,14 +60,33 @@ d3.json(url, function(eqData) {
 	legend.onAdd = function(myMap){
 		//create div var using domUtil
 		var div= L.DomUtil.create("div","info legend");
-			div.innerHTML +="<h3>Legend</h3>";
-			div.innerHTML +='<i style="background:#99ff33"></i><span>0</span><br>';
-			div.innerHTML +='<i style="background:#00ff00"></i><span>1</span><br>';
-			div.innerHTML +='<i style="background:#66ffff"></i><span>2</span><br>';
-			div.innerHTML +='<i style="background:#cc00ff"></i><span>3</span><br>';
-			div.innerHTML +='<i style="background:#ff0066"></i><span>4</span><br>';
-			div.innerHTML +='<i style="background:#ff3300"></i><span>5</span><br>';
+			// div.innerHTML +="<h3>Legend</h3>";
+			// div.innerHTML +='<i style="background:#99ff33"></i><span>0</span><br>';
+			// div.innerHTML +='<i style="background:#00ff00"></i><span>1</span><br>';
+			// div.innerHTML +='<i style="background:#66ffff"></i><span>2</span><br>';
+			// div.innerHTML +='<i style="background:#cc00ff"></i><span>3</span><br>';
+			// div.innerHTML +='<i style="background:#ff0066"></i><span>4</span><br>';
+			// div.innerHTML +='<i style="background:#ff3300"></i><span>5</span><br>';
+		var grades = [0,1,2,3,4,5];
+		var colors=["#66ffff","#99ff33","#00ff00","#cc00ff","#ff0066","#ff3300"];
+		var labels = [];
 
+		//Add legend header and markers
+		var legendInfo="<h3>Legend</h3>"+
+			"<div class=\"labels\>"+
+				"<div class=\"min\">"+grades[0]+"</div>"+
+				"<div class=\"max\">"+grades[grades.length-1]+"</div>"+
+			"</div>";
+
+		div.innerHTML=legendInfo;
+
+		grades.forEach(function(grade,index){
+			labels.push("<i style=\"background:"+colors[index]+"\"></i>");
+			// console.log(grade);
+			// console.log(index);	
+		});
+
+		div.innerHTML += "<ul>"+labels.join(" ")+"<ul>";
 		return div;
 	};
 	// earthquake.addTo(myMap)
@@ -77,21 +96,21 @@ d3.json(url, function(eqData) {
 //create color scale for magitudes using else if statements
 	function magColors(magnitude){
 		if (magnitude> 5){
-				return "#ff0066"
+				return "#ff3300"
 			}else if
 			(magnitude> 4){
-				return "#00ff00"
+				return "#ff0066"
 			} else if
 			(magnitude> 3){		
 				return "#cc00ff"
 			} else if
 			(magnitude> 2){
-				return "#66ffff"
+				return "#99ff33"
 			} else if
 			(magnitude> 1){
-				return "#99ff33"
-			} else{
 				return "#00ff00"
+			} else{
+				return "#66ffff"
 			}
 
 		};
