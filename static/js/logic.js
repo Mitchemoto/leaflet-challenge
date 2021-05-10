@@ -68,7 +68,7 @@ d3.json(url, function(eqData) {
 			// div.innerHTML +='<i style="background:#ff0066"></i><span>4</span><br>';
 			// div.innerHTML +='<i style="background:#ff3300"></i><span>5</span><br>';
 		var grades = [0,1,2,3,4,5];
-		var colors=["#66ffff","#99ff33","#00ff00","#cc00ff","#ff0066","#ff3300"];
+		var colors=["#ff99ff","#66ffff","#00ff00","#cc00ff","#ff0066","#ff3300"];
 		var labels = [];
 
 		//Add legend header and markers
@@ -108,9 +108,9 @@ d3.json(url, function(eqData) {
 				return "#99ff33"
 			} else if
 			(magnitude> 1){
-				return "#00ff00"
-			} else{
 				return "#66ffff"
+			} else{
+				return "#ff99ff"
 			}
 
 		};
