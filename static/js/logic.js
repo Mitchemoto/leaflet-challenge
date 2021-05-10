@@ -2,8 +2,8 @@
 // We set the longitude, latitude, and the starting zoom level
 // This gets inserted into the div with an id of 'map'
 var myMap = L.map("map", {
-  center: [40.7, -73.95],
-  zoom: 3
+  center: [45.05,-122.67],
+  zoom: 4
 });
 
 // Adding tile layer to the map, create as variable incase needed
@@ -29,10 +29,9 @@ var url = baseUrl
 // start d3.json function 
 d3.json(url, function(eqData) {
 	// console.log(earthquakes)
-	addFeatures(eqData.features);
-});
+	createFeatures(eqData.features);
 //using the d3.json data, create function to bind pop, and add circle layer
-function addFeatures(eqData){
+	function createFeatures(eqData){
 	var earthquakes = L.geoJson(eqData,{
 		//use onEachFeature function to bind popup/data to each created feature
 		onEachFeature(feature,layer){
@@ -54,16 +53,34 @@ function addFeatures(eqData){
 			})
 		}
 	}).addTo(myMap);
+
+	//setup the legend
+	var legend= new L.control({position: "bottomright"});
+
+	legend.onAdd = function(myMap){
+		//create div var using domUtil
+		var div= L.DomUtil.create("div","info legend");
+			div.innerHTML +="<h3>Legend</h3>";
+			div.innerHTML +='<i style="background:#99ff33"></i><span>0</span><br>';
+			div.innerHTML +='<i style="background:#00ff00"></i><span>1</span><br>';
+			div.innerHTML +='<i style="background:#66ffff"></i><span>2</span><br>';
+			div.innerHTML +='<i style="background:#cc00ff"></i><span>3</span><br>';
+			div.innerHTML +='<i style="background:#ff0066"></i><span>4</span><br>';
+			div.innerHTML +='<i style="background:#ff3300"></i><span>5</span><br>';
+
+		return div;
+	};
+	// earthquake.addTo(myMap)
+	legend.addTo(myMap);
 };
 
-	
-//create color scale for magitudes
+//create color scale for magitudes using else if statements
 	function magColors(magnitude){
 		if (magnitude> 5){
-				return "#ff3300"
+				return "#ff0066"
 			}else if
 			(magnitude> 4){
-				return "#ff0066"
+				return "#00ff00"
 			} else if
 			(magnitude> 3){		
 				return "#cc00ff"
@@ -83,10 +100,5 @@ function addFeatures(eqData){
 		return magnitude*30000;
 	}
 
-	//documentation on popups example
-	// var cmarker = L.Polygon(latlng)
-	// 				.bindPopup("<h2> Location: "+ feature.properties.place +"</h2> <br> <h2> Magnitude: " + feature.properties.mag+"</h2>").addTo(myMap);
-	// 				cmarker.openPopup();
-	// 				cmarker.closePopup();
-	// 	// }
-
+	// createFeatures(eqData.features);
+});
